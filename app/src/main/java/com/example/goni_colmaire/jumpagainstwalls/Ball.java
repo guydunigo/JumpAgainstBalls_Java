@@ -17,7 +17,7 @@ public class Ball {
     }
 
     public boolean isVisible(float height, long offset) {
-        if (y - radius + offset < 0 || y + radius + offset > height) {
+        if (y + radius + offset < 0 || y - radius + offset > height) {
             return false;
         }
         return true;

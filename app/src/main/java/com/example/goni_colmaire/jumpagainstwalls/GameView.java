@@ -47,13 +47,15 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                     );
                     // Draw other balls
                     for (int i = 0; i < balls.size(); i++) {
-                        p.setColor(balls.elementAt(i).color);
-                        canvas.drawCircle(
-                                balls.elementAt(i).x,
-                                balls.elementAt(i).y + offsetY,
-                                balls.elementAt(i).radius,
-                                p
-                        );
+                        if (balls.elementAt(i).isVisible(height, offsetY)) {
+                            p.setColor(balls.elementAt(i).color);
+                            canvas.drawCircle(
+                                    balls.elementAt(i).x,
+                                    balls.elementAt(i).y + offsetY,
+                                    balls.elementAt(i).radius,
+                                    p
+                            );
+                        }
                     }
                     // Draw stats
                     if (!isDemo) {

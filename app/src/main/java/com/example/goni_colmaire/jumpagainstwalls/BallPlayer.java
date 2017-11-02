@@ -100,16 +100,16 @@ public class BallPlayer extends Ball {
             dt *= TIMEFACTOR;
             collided = false;
 
-            float[] gravity = {gravityX, gravityY};
-            float[] normal = {0, 0};
-            float[] unorm = {0, 0};
+            float[] gravity = { gravityX, gravityY };
+            float[] normal = { 0, 0 };
+            float[] unorm = { 0, 0 };
             float norm = 0;
 
-            float[] pos = {x, y};
-            float[] cel = {celX, celY};
-            float[] new_pos = {x, y};
-            float[] other_pos = {0, 0};
-            float[] new_cel = {celX, celY};
+            float[] pos = { x, y };
+            float[] cel = { celX, celY };
+            float[] new_pos = { x, y };
+            float[] other_pos = { 0, 0 };
+            float[] new_cel = { celX, celY };
             float tmp_cel = 0;
 
             int i = 0;
@@ -121,29 +121,10 @@ public class BallPlayer extends Ball {
                 new_pos[i] = pos[i] + new_cel[i] * dt;
             }
 
-            // Colliding against walls
-            if (new_pos[0] - radius < 0 || new_pos[0] + radius > width || new_pos[1] - radius < 0 || new_pos[1] + radius > height) {
-                if (new_pos[0] - radius < 0) { // Left
-                    new_pos[0] = radius;
-                    new_cel[0] = 0;
-                } else if (new_pos[0] + radius > width) { // Right
-                    new_pos[0] = width - radius;
-                    new_cel[0] = 0;
-                }
-
-                if (false && new_pos[1] - radius < 0) { // Top
-                    new_pos[1] = radius;
-                    new_cel[1] = 0;
-                } else if (new_pos[1] + radius > height) { // Bottom
-                    new_pos[1] = height - radius;
-                    new_cel[1] = 0;
-                }
-            }
-
             // Bouncing against other balls
             for (i = 0; i < balls.size(); i++) {
                 other = balls.elementAt(i);
-                other_pos = new float[]{other.x, other.y};
+                other_pos = new float[] { other.x, other.y };
                 normal = getNormal(other_pos, new_pos);
                 norm = getNorm(normal);
                 float radSum = radius + other.radius;
@@ -157,6 +138,23 @@ public class BallPlayer extends Ball {
                     }
 
                     collided = true;
+                }
+            }
+
+            // Colliding against walls
+            if (new_pos[0] - radius < 0 || new_pos[0] + radius > width || new_pos[1] - radius < 0
+                    || new_pos[1] + radius > height) {
+                if (new_pos[0] - radius < 0) { // Left
+                    new_pos[0] = radius;
+                    new_cel[0] = 0;
+                } else if (new_pos[0] + radius > width) { // Right
+                    new_pos[0] = width - radius;
+                    new_cel[0] = 0;
+                }
+
+                if (new_pos[1] + radius > height) { // Bottom
+                    new_pos[1] = height - radius;
+                    new_cel[1] = 0;
                 }
             }
 
