@@ -14,11 +14,6 @@ public class BallPlayer extends Ball {
     private float maxHeight;
     public long nbLoops;
 
-    public final long MAX_LOOPS = 30000;
-    private final float TIMEFACTOR = 1 / 50.f;
-    private final int LIMIT_CELL = 1;
-    private final float BALLS_BOUNCE_COEF = 1.5f;
-
     public BallPlayer(float x, float y, float radius, int color) {
         super(x, y, radius, color);
         this.maxHeight = y;
@@ -29,7 +24,7 @@ public class BallPlayer extends Ball {
     }
 
     public String getRemainingTimeSeconds() {
-        return String.valueOf((MAX_LOOPS - nbLoops) / 1000) + "s";
+        return String.valueOf((Tools.MAX_LOOPS - nbLoops) / 1000) + "s";
     }
 
     public String getTimeSeconds() {
@@ -44,61 +39,13 @@ public class BallPlayer extends Ball {
         return String.valueOf((long) -(y - height) / 10) + "m";
     }
 
-    public void step(float dt, float accelX, float accelY, int wWidth, int wHeight) {
-        if (wWidth != 0 && wHeight != 0) {
-            celX += accelX * dt * TIMEFACTOR;
-            celY += accelY * dt * TIMEFACTOR;
-
-            x += celX * dt * TIMEFACTOR;
-            y += celY * dt * TIMEFACTOR;
-
-            collide(wWidth, wHeight);
-            nbLoops += dt;
-        }
-    }
-
-    private void collide(int wWidth, int wHeight) {
-        boolean xCollided = false;
-        boolean yCollided = false;
-        collided = false;
-
-        if (x - radius < 0 || x + radius > wWidth) {
-            if (Math.abs(celX) <= LIMIT_CELL) {
-                celX = 0;
-            } else {
-                xCollided = true;
-                celX *= -1;
-            }
-        }
-        if (x - radius < 0) {
-            x = radius;
-        } else if (x + radius > wWidth) {
-            x = wWidth - radius;
-        }
-
-        if (y - radius < 0 || y + radius > wHeight) {
-            if (Math.abs(celY) <= LIMIT_CELL) {
-                celY = 0;
-            } else {
-                celY *= -1;
-                yCollided = true;
-            }
-        }
-        if (y - radius < 0) {
-            y = radius;
-        } else if (y + radius > wHeight) {
-            y = wHeight - radius;
-        }
-
-        collided = xCollided || yCollided;
-    }
-
     // Walls block the ball, balls are super bouncy
-    public void step_physics(float dt, float gravityX, float gravityY, float width, float height, Vector<Ball> balls) {
+    public void step(float dt, float time_coef, float gravityX, float gravityY, float width, float height, Vector<Ball> balls) {
         if (width != 0 && height != 0) {
             nbLoops += dt;
-            dt *= TIMEFACTOR;
             collided = false;
+
+            dt *= time_coef;
 
             float[] gravity = { gravityX, gravityY };
             float[] normal = { 0, 0 };
@@ -125,13 +72,13 @@ public class BallPlayer extends Ball {
             for (i = 0; i < balls.size(); i++) {
                 other = balls.elementAt(i);
                 other_pos = new float[] { other.x, other.y };
-                normal = getNormal(other_pos, new_pos);
-                norm = getNorm(normal);
+                normal = Tools.getVector(other_pos, new_pos);
+                norm = Tools.getNorm(normal);
                 float radSum = radius + other.radius;
                 if (norm < radSum) {
-                    unorm = getUnitNormal(normal, norm);
+                    unorm = Tools.getUnitVector(normal, norm);
 
-                    tmp_cel = (-1) * BALLS_BOUNCE_COEF * (new_cel[0] * unorm[0] + new_cel[1] * unorm[1]);
+                    tmp_cel = (-1) * Tools.BALLS_BOUNCE_COEF * (new_cel[0] * unorm[0] + new_cel[1] * unorm[1]);
                     for (i = 0; i < 2; i++) {
                         new_cel[i] = tmp_cel * unorm[i];
                         new_pos[i] += unorm[i] * 2 * (radSum - norm);
@@ -160,7 +107,7 @@ public class BallPlayer extends Ball {
 
             // Nullify the celerity when too low
             for (i = 0; i < 2; i++) {
-                if (Math.abs(new_cel[i]) <= LIMIT_CELL)
+                if (Math.abs(new_cel[i]) <= Tools.LIMIT_CELL)
                     new_cel[i] = 0;
             }
 

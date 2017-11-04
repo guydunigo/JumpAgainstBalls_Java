@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$USER_HOME$/Téléchargements/Programmation/Mobile/Android/JumpAgainstWalls/JumpAgainstWalls.iml" filepath="$USER_HOME$/Téléchargements/Programmation/Mobile/Android/JumpAgainstWalls/JumpAgainstWalls.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../JumpAgainstBalls_Java.iml" filepath="$PROJECT_DIR$/../JumpAgainstBalls_Java.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../JumpAgainstBalls_Java.iml" filepath="$PROJECT_DIR$/../../JumpAgainstBalls_Java.iml" />
       <module fileurl="file://$USER_HOME$/Téléchargements/Programmation/Mobile/Android/JumpAgainstWalls/app/app.iml" filepath="$USER_HOME$/Téléchargements/Programmation/Mobile/Android/JumpAgainstWalls/app/app.iml" />
     </modules>
   </component>

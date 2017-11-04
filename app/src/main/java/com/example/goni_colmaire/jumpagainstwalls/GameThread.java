@@ -29,10 +29,6 @@ public class GameThread extends Thread {
     private Ball[] rightBalls;
     private boolean isDemo;
 
-    private final int STEPTIME = 20;
-    private final int ACCEL_Y = 10;
-    private final int ACCEL_X_COEF = -3;
-
     public GameThread(GameActivity act, Context context, GameView v, BallPlayer b, Vector<Ball> balls) {
         super();
         ball = b;
@@ -85,7 +81,7 @@ public class GameThread extends Thread {
     public void run() {
         super.run();
         while (isRunning == true) {
-            if (!isDemo && ball.nbLoops > ball.MAX_LOOPS) {
+            if (!isDemo && ball.nbLoops > Tools.MAX_LOOPS) {
                 break;
             }
 
@@ -111,8 +107,7 @@ public class GameThread extends Thread {
                     allSet = true;
                 }
 
-                // ball.step(STEPTIME, accelX, accelY, view.width, view.height);
-                ball.step_physics(STEPTIME, ACCEL_X_COEF * accelX, ACCEL_Y, view.width, view.height, balls);
+                ball.step(Tools.STEPTIME, Tools.TIMEFACTOR, Tools.ACCEL_X_COEF * accelX, Tools.ACCEL_Y, view.width, view.height, balls);
 
                 // update offset :
                 if (ball.y + offsetY < view.height / 3.f) {
@@ -137,7 +132,7 @@ public class GameThread extends Thread {
             }
 
             try {
-                sleep(STEPTIME);
+                sleep(Tools.STEPTIME);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
